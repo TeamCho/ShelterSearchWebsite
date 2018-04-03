@@ -1,0 +1,21 @@
+html 
+	include components/header.pug
+	body
+		include components/navbar.pug
+		.container-fluid
+			h1 Login
+			form(action='/login', method='POST')
+				.form-group
+					input.form-control(type='email', placeholder='Email', name='email')
+				.form-group
+					input.form-control(type='password', placeholder='Password', name='password')
+				|
+				button.btn.btn-warning.btn-lg(type='submit')    Login
+				p(class='errorMessage')=errorMessage
+			hr
+			p
+				| Need an account?
+				a(href='/signup')  Signup
+			p
+				| Or go
+				a(href='/')  home
