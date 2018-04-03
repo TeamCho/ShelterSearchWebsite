@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routing
 app.get('/', (req, res) => {
-	checkUser((user) => {
+	checkUser((userInfo) => {
 		res.render('index', {user: userInfo});
 	});
 });
