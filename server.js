@@ -79,7 +79,7 @@ app.post('/login', (req, res) => {
 // Profile methods
 app.get('/profile', (req, res) => {
 	checkAuth(res);
-	checkUser((userInfo) => {
+	getUserInfo((userInfo) => {
 		res.render('profile', {user: userInfo});
 	});
 });
@@ -88,7 +88,7 @@ app.get('/profile', (req, res) => {
 app.get('/list', (req, res) => {
 	checkAuth(res);
 	getShelterList((shelterList) => {
-		checkUser((userInfo) => {
+		getUserInfo((userInfo) => {
 			res.render('list', {user: userInfo, shelters: shelterList})
 		});
 	});
@@ -101,7 +101,7 @@ app.get('/list/:shelterNo', (req, res) => {
 			console.log("Hello world");
 			return res.redirect('/list');
 		} else {
-			checkUser((userInfo) => {
+			getUserInfo((userInfo) => {
 				res.render('shelter', {user: userInfo, shelter: shelterInfo})
 			});
 		}
