@@ -1,0 +1,22 @@
+html
+	include components/header.pug
+	script(src='/js/ajax.js')
+	body
+		include components/navbar.pug
+		.container-fluid
+			form#searchForm(action="/borrow", method="POST", class="search-wrapper")
+				input.form-control(id="searchbar" list="autocomplete" name="searchvalue" type="text" placeholder="Search" required="")
+				datalist(id="autocomplete")
+					option(value="Drills")
+					option(value="Saws")
+					option(value="Screwdrivers")
+					option(value="Wrenches")
+		.container-fluid
+			h1= "Borrow "
+			each key, index in shelters
+				.row
+					.col-md-4
+						a(href="list/" + index, title=key.name)
+							.container-fluid
+								h3= key.name
+								p= key.address

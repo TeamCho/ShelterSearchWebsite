@@ -10,11 +10,8 @@ nav.navbar.navbar-default
         ul.nav.navbar-nav.navbar-right  
             if (user)
                 li
-                    a(href='/borrow')
-                        h5 Borrow
-                li
-                    a(href='/lend')
-                        h5 Lend    
+                    a(href='/list')
+                        h5 Shelters List    
                 li
                     a(href='/profile')
                         h5 My Profile
@@ -23,13 +20,8 @@ nav.navbar.navbar-default
                         h5 Sign out
             else
                 li
-                    a(href='/borrow')
-                        h5 Borrow
-                li
-                    a(href='/lend')
-                        h5 Lend
-                li
                     a(href='/login')
                         h5 Log In
                 li
-                    a(href='/signup')
+                    a(href='/register')
+                        h5 Register
