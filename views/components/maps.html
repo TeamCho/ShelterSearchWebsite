@@ -1,0 +1,24 @@
+<script>
+	var map;
+	
+	function initMap() {
+		var atlanta = {lat: 33.75, lng: -84.39};
+		map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 11,
+			center: atlanta
+		});
+	}
+
+	function addMarker(latitude, longitude, name, phoneNum, index) {
+		console.log(longitude);
+		var marker = new google.maps.Marker({
+			position: ({lat: latitude, lng: longitude}),
+			title: name,
+			map: map,
+			url: '/list/' + index
+		});
+		google.maps.event.addListener(marker, 'click', function() {
+	        window.location.href = this.url;
+	    });
+	}
+</script>

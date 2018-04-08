@@ -1,22 +1,28 @@
 html
 	include components/header.pug
-	script(src='/js/ajax.js')
 	body
 		include components/navbar.pug
 		.container-fluid
-			form#searchForm(action="/borrow", method="POST", class="search-wrapper")
+			form#searchForm(action="/search", method="POST", class="search-wrapper")
 				input.form-control(id="searchbar" list="autocomplete" name="searchvalue" type="text" placeholder="Search" required="")
 				datalist(id="autocomplete")
-					option(value="Drills")
-					option(value="Saws")
-					option(value="Screwdrivers")
-					option(value="Wrenches")
+					option(value="Male")
+					option(value="Female")
+					option(value="Children")
+					option(value="Sneiors")
 		.container-fluid
-			h1= "Borrow "
-			each key, index in shelters
-				.row
-					.col-md-4
+			.col-md-4#shelterList
+				h1= "Shelters"
+				each key, index in shelters
+					.row
 						a(href="list/" + index, title=key.name)
 							.container-fluid
 								h3= key.name
 								p= key.address
+			.col-md-8
+				h1="Map"
+				#map
+		include components/maps.html
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNgTSfwEO1JWPGleT_qmfSG6P-HNyrw2M&callback=initMap"></script>
+		each key, index in shelters
+			<script>addMarker(#{key.latitude}, #{key.longitude}, "#{key.name}", "#{key.phoneNum}", #{index}); </script>
