@@ -13,8 +13,10 @@ app.use(bodyParser());
 // Setting up Firebase
 const firebase = require('firebase');
 
+require('dotenv').config();
+
 var config = {
-	apiKey: "AIzaSyBY4bfsuMZhdkrf1BxD3IYRvwhxSKHz9aU",
+	apiKey: process.env.FIREBASE_API_KEY,
 	authDomain: "cs2340project-76d43.firebaseapp.com",
 	databaseURL: "https://cs2340project-76d43.firebaseio.com",
 	projectId: "cs2340project-76d43",
