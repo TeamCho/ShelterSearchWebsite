@@ -4,6 +4,16 @@ html
 		include components/navbar.pug
 		.container-fluid
 			h2  Welcome #{user.name}
-			h3 You are a #{user.userType}
-			if user.userType == user
-				h5 Hello World
+			.row
+				.col-md-4
+					table.table
+						tbody
+							tr
+								td User Type
+								td #{user.userType}
+							tr
+								td Email
+								td #{user.email}
+							tr
+								td Beds Taken
+								td #{user.bedsTaken}

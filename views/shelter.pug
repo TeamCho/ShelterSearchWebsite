@@ -9,6 +9,10 @@ html
 					p #{shelter.address}
 					p Vacancies: #{shelter.vacancies}
 					p Contact: #{shelter.phoneNum}
+					form(action="/bookBeds", method="POST")
+						input(type="number", placeholder="Number of beds", name="numBeds")
+						input(type="hidden", name="shelter", value=1)
+						button.btn.btn-primary(type='submit') Submit
 				.col-md-8
 					#map
 		include components/maps.html

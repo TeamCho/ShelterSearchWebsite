@@ -32,9 +32,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routing
 app.get('/', (req, res) => {
-	checkUser((userInfo) => {
-		res.render('index', {user: userInfo});
-	});
+	checkAuth(res);
+	return res.redirect('/profile');
+	// return res.redirect('/login');
+	// checkUser((userInfo) => {
+	// 	res.render('index', {user: userInfo});
+	// });
 });
 
 //Register methods
@@ -111,6 +114,16 @@ app.get('/list/:shelterNo', (req, res) => {
 	});
 });
 
+app.post('/bookBeds', (req, res) => {
+	var numToBook = req.body.numBeds;
+	var shelter = req.body.shelterNo;
+	// if (numToBook <= 0 || ) {
+		console.log("Hello world");
+	// }
+	console.log(numToBook);
+	return res.redirect("/list");
+});
+
 // Logout methods
 app.get('/logout', (req, res) => {
 	firebase.auth().signOut();
@@ -166,7 +179,6 @@ var checkValidParams = function(parameter, callback) {
 }
 
 var getShelterList = function(parameter, callback) {
-	console.log(parameter);
 	var ref = db.ref().child('Shelter/');
 	ref.on("value", function(snapshot) {
 		var shelters = snapshot.val();
@@ -224,7 +236,6 @@ var getShelterList = function(parameter, callback) {
 			}
 		});
 	}, function (errorObject) {
-		console.log("The read failed: " + errorObject.code);
 		callback("The read failed: " + errorObject.code, []);
 	});
 }
