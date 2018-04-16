@@ -1,0 +1,21 @@
+$black: #000000;
+$white: #f3efe0;
+$accent: #e5323b;
+
+.error {
+	color: red;
+}
+
+.navbar {
+	border-radius: 0!important;
+}
+
+#map {
+	height: 70%;
+	width: 100%;
+}
+
+#shelterList {
+	height: 80%;
+	overflow: scroll;
+}

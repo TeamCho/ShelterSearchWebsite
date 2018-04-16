@@ -1,9 +1,13 @@
+.error {
+  color: red; }
+
+.navbar {
+  border-radius: 0 !important; }
+
 #map {
-	height: 70%;
-	width: 100%;
-}
+  height: 70%;
+  width: 100%; }
 
 #shelterList {
-	height: 80%;
-	overflow: scroll;
-}
+  height: 80%;
+  overflow: scroll; }

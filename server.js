@@ -89,9 +89,10 @@ app.get('/profile', (req, res) => {
 // Shelter list methods
 app.get('/list', (req, res) => {
 	checkAuth(res);
-	getShelterList((shelterList) => {
+	var param = req.query.searchvalue;
+	getShelterList(param, (error, shelterList) => {
 		getUserInfo((userInfo) => {
-			res.render('list', {user: userInfo, shelters: shelterList})
+			res.render('list', {user: userInfo, error: error, shelters: shelterList})
 		});
 	});
 });
@@ -155,13 +156,76 @@ function addUser(name, email, type) {
 }
 
 // Some shelter methods
-var getShelterList = function(callback) {
+var checkValidParams = function(parameter, callback) {
+	var validParams = ["Male", "Female", "Women", "Families w/ newborns", "Families", "Children", "Young adults", "Anyone"];
+	if (parameter != null && validParams.indexOf(parameter) == -1) {
+		callback("That parameter is invalid");
+	} else {
+		callback();
+	}
+}
+
+var getShelterList = function(parameter, callback) {
+	console.log(parameter);
 	var ref = db.ref().child('Shelter/');
 	ref.on("value", function(snapshot) {
-		callback(snapshot.val());
+		var shelters = snapshot.val();
+		var afterShelters = [];
+		checkValidParams(parameter, (message) => {
+			if (message != null) {
+				callback(message, shelters);
+			} else {
+				if (parameter == "Male") {
+					for (var i = 0; i < shelters.length; i++) {
+						if (shelters[i].restrictions.indexOf("Female") < 0) {
+							afterShelters.push(shelters[i]);
+						}
+					}
+				} else if (parameter == "Female") {
+					for (var i = 0; i < shelters.length; i++) {
+						if (shelters[i].restrictions.indexOf("Men") < 0) {
+							afterShelters.push(shelters[i]);
+						}
+					}
+				} else if (parameter == "Families w/ newborns") {
+					for (var i = 0; i < shelters.length; i++) {
+						if (shelters[i].restrictions == "Families w/ newborns") {
+							afterShelters.push(shelters[i]);
+						}
+					}
+				} else if (parameter == "Families") {
+					for (var i = 0; i < shelters.length; i++) {
+						if (shelters[i].restrictions.indexOf("Families") >= 0) {
+							afterShelters.push(shelters[i]);
+						}
+					}
+				} else if (parameter == "Children") {
+					for (var i = 0; i < shelters.length; i++) {
+						if (shelters[i].restrictions.indexOf("Children") >= 0) {
+							afterShelters.push(shelters[i]);
+						}
+					}
+				} else if (parameter == "Young adults") {
+					for (var i = 0; i < shelters.length; i++) {
+						if (shelters[i].restrictions.indexOf("Young adults") >= 0) {
+							afterShelters.push(shelters[i]);
+						}
+					}
+				} else if (parameter == "Anyone") {
+					for (var i = 0; i < shelters.length; i++) {
+						if (shelters[i].restrictions.indexOf("Anyone") >= 0) {
+							afterShelters.push(shelters[i]);
+						}
+					}
+				} else {
+					afterShelters = shelters;
+				}
+				callback(message, afterShelters)
+			}
+		});
 	}, function (errorObject) {
 		console.log("The read failed: " + errorObject.code);
-		callback([]);
+		callback("The read failed: " + errorObject.code, []);
 	});
 }
 

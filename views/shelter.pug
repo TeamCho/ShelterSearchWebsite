@@ -3,7 +3,15 @@ html
 	body
 		include components/navbar.pug
 		.container-fluid
-			h2  Welcome to #{shelter.name}
-			p #{shelter.address}
-			p Vacancies: #{shelter.vacancies}
-			p Contact: #{shelter.phoneNum}
+			h2 #{shelter.name}
+			.row
+				.col-md-4
+					p #{shelter.address}
+					p Vacancies: #{shelter.vacancies}
+					p Contact: #{shelter.phoneNum}
+				.col-md-8
+					#map
+		include components/maps.html
+		script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNgTSfwEO1JWPGleT_qmfSG6P-HNyrw2M&callback=initMap")
+		// Adding a marker to the shelter
+		script addMarker(#{shelter.latitude}, #{shelter.longitude}, "#{shelter.name}", "#{shelter.phoneNum}");

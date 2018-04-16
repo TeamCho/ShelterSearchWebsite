@@ -3,13 +3,17 @@ html
 	body
 		include components/navbar.pug
 		.container-fluid
-			form#searchForm(action="/search", method="POST", class="search-wrapper")
+			form#searchForm(action="/list", method="GET", class="search-wrapper")
 				input.form-control(id="searchbar" list="autocomplete" name="searchvalue" type="text" placeholder="Search" required="")
 				datalist(id="autocomplete")
 					option(value="Male")
 					option(value="Female")
+					option(value="Families w/ newborns")
+					option(value="Families")
 					option(value="Children")
-					option(value="Sneiors")
+					option(value="Young adults")
+					option(value="Anyone")
+			p1.error=error
 		.container-fluid
 			.col-md-4#shelterList
 				h1= "Shelters"
@@ -23,6 +27,7 @@ html
 				h1="Map"
 				#map
 		include components/maps.html
-		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNgTSfwEO1JWPGleT_qmfSG6P-HNyrw2M&callback=initMap"></script>
+		script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNgTSfwEO1JWPGleT_qmfSG6P-HNyrw2M&callback=initMap")
+		// Adding markers for each of the shelters
 		each key, index in shelters
-			<script>addMarker(#{key.latitude}, #{key.longitude}, "#{key.name}", "#{key.phoneNum}", #{index}); </script>
+			script addMarker(#{key.latitude}, #{key.longitude}, "#{key.name}", "#{key.phoneNum}", #{index});
