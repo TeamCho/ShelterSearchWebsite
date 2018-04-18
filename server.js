@@ -75,9 +75,7 @@ app.post('/login', (req, res) => {
 	firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
 		return res.redirect('/profile');
 	}, (error) => {
-		checkUser((userInfo) => {
-			return res.render('login', {user: userInfo, errorMessage: error.message});
-		});
+		return res.render('login', {errorMessage: error.message});
 	});
 });
 
@@ -134,12 +132,21 @@ app.get('/list/:shelterNo', (req, res) => {
 	});
 });
 
-app.post('/bookBeds', (req, res) => {
+app.post('/list/:shelterNo', (req, res) => {
 	var numToBook = req.body.numBeds;
 	var shelter = req.body.shelterNo;
-	// if (numToBook <= 0 || ) {
-		console.log("Hello world");
-	// }
+	getShelterInfo(req.params.shelterNo, (shelterInfo) => {
+		if (shelterInfo == -1) {
+			console.log("Hello world");
+			return res.redirect('/list');
+		} else {
+			if (numToBook > 0 && shelterInfo.vacancies > numToBook) {
+				db.ref('Shelter/' + shelterNo).set()
+				console.log("Hello world");
+			}
+		}
+	});
+	
 	console.log(numToBook);
 	return res.redirect("/list");
 });
@@ -177,12 +184,12 @@ function checkAuth(res) {
 function addUser(name, email, type) {
 	checkUser((user) => {
 			db.ref('User/' + user.uid).set({
-			name: name,
-			email: email,
-			booking: 2147483647,
-			bedsTaken: 0,
-			uid: user.uid,
-			userType: type
+				name: name,
+				email: email,
+				booking: 2147483647,
+				bedsTaken: 0,
+				uid: user.uid,
+				userType: type
 		});
 	});
 	
@@ -209,7 +216,7 @@ var getShelterList = function(parameter, callback) {
 			} else {
 				if (parameter == "Male") {
 					for (var i = 0; i < shelters.length; i++) {
-						if (shelters[i].restrictions.indexOf("Female") < 0) {
+						if (shelters[i].restrictions.indexOf("Women") < 0) {
 							afterShelters.push(shelters[i]);
 						}
 					}

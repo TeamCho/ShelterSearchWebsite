@@ -17,9 +17,9 @@ html
 		.container-fluid
 			.col-md-4#shelterList
 				h1= "Shelters"
-				each key, index in shelters
+				each key in shelters
 					.row
-						a(href="list/" + index, title=key.name)
+						a(href="list/" + key.key, title=key.name)
 							.container-fluid
 								h3= key.name
 								p= key.address
