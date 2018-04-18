@@ -81,6 +81,26 @@ app.post('/login', (req, res) => {
 	});
 });
 
+// Password reset way
+app.get('/reset', (req, res) => {
+	checkUser((userInfo) => {
+		res.render('reset', {user: userInfo});
+	});
+});
+
+app.post('/reset', (req, res) => {
+	var auth = firebase.auth();
+	var email = req.body.email;
+	auth.sendPasswordResetEmail(email).then(function() {
+		return res.redirect('/login');
+	}).catch(function(error) {
+		checkUser((userInfo) => {
+			return res.render('reset', {user: userInfo, errorMessage: error.message});
+		});
+	});
+
+});
+
 // Profile methods
 app.get('/profile', (req, res) => {
 	checkAuth(res);

@@ -17,11 +17,11 @@ html
 						option(value="user") User
 						option(value="admin") Administrator
 				button.btn.btn-warning.btn-lg(type='submit')    Sign Up
-				p(class='errorMessage')=errorMessage
+				p(class='error')=errorMessage
 			hr
 			p
 				| Need an account? 
-				a(href='/regster') Signup
+				a(href='/register') Signup
 			p
-				| Or go 
-				a(href='/') home
+				| Or forgot your password? 
+				a(href='/reset') Reset
