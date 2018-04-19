@@ -9,7 +9,7 @@ html
 					p #{shelter.address}
 					p Vacancies: #{shelter.vacancies}
 					p Contact: #{shelter.phoneNum}
-					form(action="", method="POST")
+					form(action="/list/" + shelter.key, method="POST")
 						input(type="number", placeholder="Number of beds", name="numBeds")
 						input(type="hidden", name="shelter", value=1)
 						button.btn.btn-primary(type='submit') Submit

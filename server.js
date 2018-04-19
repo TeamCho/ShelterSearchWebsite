@@ -8,7 +8,8 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
 app.use(cookieParser());
-app.use(bodyParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 // Setting up Firebase
 const firebase = require('firebase');
@@ -32,12 +33,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routing
 app.get('/', (req, res) => {
-	checkAuth(res);
-	return res.redirect('/profile');
-	// return res.redirect('/login');
-	// checkUser((userInfo) => {
-	// 	res.render('index', {user: userInfo});
-	// });
+	checkAuth(res, () => {
+		return res.redirect('/profile');
+	});
 });
 
 //Register methods
@@ -101,47 +99,51 @@ app.post('/reset', (req, res) => {
 
 // Profile methods
 app.get('/profile', (req, res) => {
-	checkAuth(res);
-	getUserInfo((userInfo) => {
-		res.render('profile', {user: userInfo});
+	checkAuth(res, () => {
+		getUserInfo((userInfo) => {
+			res.render('profile', {user: userInfo});
+		});
 	});
 });
 
 // Shelter list methods
 app.get('/list', (req, res) => {
-	checkAuth(res);
-	var param = req.query.searchvalue;
-	getShelterList(param, (error, shelterList) => {
-		getUserInfo((userInfo) => {
-			res.render('list', {user: userInfo, error: error, shelters: shelterList})
+	checkAuth(res, () => {
+		var param = req.query.searchvalue;
+		getShelterList(param, (error, shelterList) => {
+			getUserInfo((userInfo) => {
+				res.render('list', {user: userInfo, error: error, shelters: shelterList})
+			});
 		});
 	});
+	
 });
 
 app.get('/list/:shelterNo', (req, res) => {
-	checkAuth(res);
-	getShelterInfo(req.params.shelterNo, (shelterInfo) => {
-		if (shelterInfo == -1) {
-			console.log("Hello world");
-			return res.redirect('/list');
-		} else {
-			getUserInfo((userInfo) => {
-				res.render('shelter', {user: userInfo, shelter: shelterInfo})
-			});
-		}
+	checkAuth(res, () => {
+		getShelterInfo(req.params.shelterNo, (shelterInfo) => {
+			if (shelterInfo == -1) {
+				console.log("Hello world");
+				return res.redirect('/list');
+			} else {
+				getUserInfo((userInfo) => {
+					res.render('shelter', {user: userInfo, shelter: shelterInfo})
+				});
+			}
+		});
 	});
+	
 });
 
 app.post('/list/:shelterNo', (req, res) => {
 	var numToBook = req.body.numBeds;
-	var shelter = req.body.shelterNo;
+	var shelter = req.params.shelterNo;
 	getShelterInfo(req.params.shelterNo, (shelterInfo) => {
 		if (shelterInfo == -1) {
 			console.log("Hello world");
 			return res.redirect('/list');
 		} else {
 			if (numToBook > 0 && shelterInfo.vacancies > numToBook) {
-				db.ref('Shelter/' + shelterNo).set()
 				console.log("Hello world");
 			}
 		}
@@ -161,6 +163,7 @@ app.get('/logout', (req, res) => {
 var checkUser = function(callback) {
 	var user = firebase.auth().currentUser;
 	callback(user);
+	return;
 }
 
 var getUserInfo = function(callback) {
@@ -171,13 +174,16 @@ var getUserInfo = function(callback) {
 			callback(userInfo);
 		});
 	});
+	return;
 }
 
-function checkAuth(res) {
+var checkAuth = function(res, callback) {
 	checkUser((user) => {
 		if (!user) {
 			return res.redirect('/login');
 		}
+		callback();
+		return;
 	});
 }
 
@@ -192,6 +198,7 @@ function addUser(name, email, type) {
 				userType: type
 		});
 	});
+	return;
 	
 }
 
@@ -203,6 +210,7 @@ var checkValidParams = function(parameter, callback) {
 	} else {
 		callback();
 	}
+	return;
 }
 
 var getShelterList = function(parameter, callback) {
@@ -265,6 +273,7 @@ var getShelterList = function(parameter, callback) {
 	}, function (errorObject) {
 		callback("The read failed: " + errorObject.code, []);
 	});
+	return;
 }
 
 var getShelterInfo = function(shelterNo, callback) {
@@ -280,6 +289,7 @@ var getShelterInfo = function(shelterNo, callback) {
 		console.log("The read failed: " + errorObject.code);
 		callback(-1);
 	});
+	return;
 }
 
 app.listen(port);
