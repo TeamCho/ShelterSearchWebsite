@@ -41,7 +41,7 @@ app.get('/', (req, res) => {
 //Register methods
 app.get('/register', (req, res) => {
 	checkUser((userInfo) => {
-		res.render('register', {user: userInfo});
+		res.render('login_register', {user: userInfo});
 	});
 });
 
@@ -56,14 +56,14 @@ app.post('/register', (req, res) => {
 			return res.redirect('/');
 		});
 	}, (error) => {
-		return res.render('register', {errorMessage: error.message});
+		return res.render('login_register', {errorMessage: error.message});
 	});
 });
 
 // Login methods
 app.get('/login', (req, res) => {
 	checkUser((userInfo) => {
-		res.render('login', {user: userInfo});
+		res.render('login_register', {user: userInfo});
 	});
 });
 
@@ -73,7 +73,7 @@ app.post('/login', (req, res) => {
 	firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
 		return res.redirect('/profile');
 	}, (error) => {
-		return res.render('login', {errorMessage: error.message});
+		return res.render('login_register', {errorMessage: error.message});
 	});
 });
 
@@ -101,7 +101,9 @@ app.post('/reset', (req, res) => {
 app.get('/profile', (req, res) => {
 	checkAuth(res, () => {
 		getUserInfo((userInfo) => {
-			res.render('profile', {user: userInfo});
+			getUserList((userList) => {
+				res.render('profile', {user: userInfo, userList: userList});
+			})	
 		});
 	});
 });
@@ -198,8 +200,18 @@ function addUser(name, email, type) {
 				userType: type
 		});
 	});
+	return;	
+}
+
+var getUserList = function(callback) {
+	var ref = db.ref().child('User/');
+	ref.on("value", function(snapshot) {
+		callback(snapshot.val());
+	}, function (errorObject) {
+		console.log("The read failed: " + errorObject.code);
+		callback(-1);
+	});
 	return;
-	
 }
 
 // Some shelter methods
@@ -217,6 +229,7 @@ var getShelterList = function(parameter, callback) {
 	var ref = db.ref().child('Shelter/');
 	ref.on("value", function(snapshot) {
 		var shelters = snapshot.val();
+		console.log(shelters)
 		var afterShelters = [];
 		checkValidParams(parameter, (message) => {
 			if (message != null) {
@@ -290,6 +303,21 @@ var getShelterInfo = function(shelterNo, callback) {
 		callback(-1);
 	});
 	return;
+}
+
+var book = function(shelterNo, numBeds, callback) {
+	var ref = db.ref().child('Shelter/' + shelterNo + '/');
+	ref.on("value", function(snapshot) {
+		if (!snapshot.val()) {
+			console.log("Invalid shelter");
+			callback(-1);
+		} else {
+			callback(snapshot.val());
+		}
+	}, function (errorObject) {
+		console.log("The read failed: " + errorObject.code);
+		callback(-1);
+	});
 }
 
 app.listen(port);

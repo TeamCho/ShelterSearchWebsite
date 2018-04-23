@@ -1,0 +1,36 @@
+html
+	include components/header.pug
+	body
+		include components/navbar.pug
+		.container-fluid
+			.login-box
+				.lb-header
+					a#login-box-link.active(href='#') Login
+					a#signup-box-link(href='#') Sign Up
+				.social-login
+					a(href='#')
+						i.fab.fa-facebook-f.fa-lg
+						| Login with facebook
+					a(href='#')
+						i.fab.fa-google.fa-lg
+						| Login with Google
+				form.email-login(action='/login', method='post')
+					.u-form-group
+						input(name='email', type='email', placeholder='Email')
+					.u-form-group
+						input(name='password', type='password', placeholder='Password')
+					.u-form-group
+						button(type='submit') Log in
+					.u-form-group
+						a.forgot-password(href='/reset') Forgot password?
+				form.email-signup(action='register')
+					.u-form-group
+						input(name='email', type='email', placeholder='Email')
+					.u-form-group
+						input(name='password', type='password', placeholder='Password')
+					.u-form-group
+						input(type='password', placeholder='Confirm Password')
+					.u-form-group
+						button(type='submit') Sign Up
+				p(class='error')=errorMessage
+	script(src='register.js')

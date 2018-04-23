@@ -3,17 +3,46 @@ html
 	body
 		include components/navbar.pug
 		.container-fluid
-			h2  Welcome #{user.name}
 			.row
 				.col-md-4
+					h2  Your Profile
 					table.table
 						tbody
 							tr
+								td Name
+								td #{user.name}
+								td 
+									i(class="fas fa-cog")
+							tr
 								td User Type
 								td #{user.userType}
+								td 
+									i(class="fas fa-cog")
 							tr
 								td Email
 								td #{user.email}
+								td
+									i(class="fas fa-cog")
 							tr
 								td Beds Taken
 								td #{user.bedsTaken}
+								td
+							tr
+								td Logged Into
+								td #{user.shelter}
+								td
+				.col-md-8
+					if user.userType == 'admin'
+						h2 Admin Dashboard
+						table.table
+							tbody
+								tr
+									th Name
+									th Email
+									th Ban/ Unban
+								for other in userList
+									tr
+										td #{other.name}
+										td #{other.email}
+										td 
+											i(class="fas fa-ban ban")

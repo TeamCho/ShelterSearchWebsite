@@ -3,16 +3,13 @@ html
 	body
 		include components/navbar.pug
 		.container-fluid
-			h1 Reset
-			form(action='/reset', method='POST')
-				.form-group
-					input.form-control(type='email', placeholder='Email', name='email')
-				button.btn.btn-warning.btn-lg(type='submit') Login
-				p(class='error')=errorMessage
-			hr
-			p
-				| Want to login?
-				a(href='/login')  Login
-			p
-				| Or need an account?
-				a(href='/register')  Sign up
+			.login-box
+				.lb-header
+					a#login-box-link.active(href='#') Reset Password
+				form.email-login(action='/reset', method='post')
+					.u-form-group
+						input(name='email', type='email', placeholder='Email')
+					.u-form-group
+						button(type='submit') Reset Password
+					.u-form-group
+						a.forgot-password(href='/login') Return to login?
