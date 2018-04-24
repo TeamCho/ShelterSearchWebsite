@@ -108,6 +108,16 @@ app.get('/profile', (req, res) => {
 	});
 });
 
+app.post('/profile', (req, res, next) => {
+	checkAuth(res, () => {
+		var newName = req.body.name;
+		var user = firebase.auth().currentUser;
+		var ref = db.ref().child('User/' + user.uid + '/name');
+		ref.set(newName);
+		return res.redirect('/profile');
+	});
+});
+
 // Shelter list methods
 app.get('/list', (req, res) => {
 	checkAuth(res, () => {
@@ -164,8 +174,7 @@ app.get('/logout', (req, res) => {
 // Couple of methods to check for current user
 var checkUser = function(callback) {
 	var user = firebase.auth().currentUser;
-	callback(user);
-	return;
+	return callback(user);
 }
 
 var getUserInfo = function(callback) {
@@ -197,7 +206,8 @@ function addUser(name, email, type) {
 				booking: 2147483647,
 				bedsTaken: 0,
 				uid: user.uid,
-				userType: type
+				userType: type,
+				shelter: '-'
 		});
 	});
 	return;	

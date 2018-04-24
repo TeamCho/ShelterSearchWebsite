@@ -10,19 +10,43 @@ html
 						tbody
 							tr
 								td Name
-								td #{user.name}
-								td 
-									i(class="fas fa-cog")
+								// Display purposes
+								.name-text
+									td.name-text #{user.name}
+									td.name-text
+										a#change-name-link(href='#')
+											i(class="fas fa-cog")
+								// Change purposes
+								.name-change
+									td.name-change
+										form(action="/profile", method="POST")
+											input(type="text", value=user.name, name="name")
+									td.name-change
+										a#cancel-name-change-link(href='#')
+											i(class="fas fa-times")
+
 							tr
 								td User Type
 								td #{user.userType}
-								td 
-									i(class="fas fa-cog")
+								td
+									a#change-user-type(href='#')
+										i(class="fas fa-cog")
 							tr
 								td Email
-								td #{user.email}
-								td
-									i(class="fas fa-cog")
+								// Display purposes
+								.email-text
+									td.email-text #{user.email}
+									td.email-text
+										a#change-email-link(href='#')
+											i(class="fas fa-cog")
+								// Change purposes
+								.email-change
+									td.email-change
+										form(action="/profile", method="POST")
+											input(type="text", value=user.email, name=email)
+									td.email-change
+										a#cancel-email-change-link(href='#')
+											i(class="fas fa-times")
 							tr
 								td Beds Taken
 								td #{user.bedsTaken}
@@ -32,7 +56,7 @@ html
 								td #{user.shelter}
 								td
 				.col-md-8
-					if user.userType == 'admin'
+					if user.userType != 'admin'
 						h2 Admin Dashboard
 						table.table
 							tbody
@@ -44,5 +68,6 @@ html
 									tr
 										td #{other.name}
 										td #{other.email}
-										td 
+										td
 											i(class="fas fa-ban ban")
+		script(src='js/profile.js')
