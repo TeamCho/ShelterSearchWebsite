@@ -29,7 +29,7 @@
     "express-session": "^1.15.6",
     "firebase": "^4.12.1",
     "npm": "^6.13.4",
-    "pug": "^2.0.3"
+    "pug": "^3.0.1"
   },
   "devDependencies": {
     "node-sass": "^4.8.3",
